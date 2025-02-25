@@ -33,7 +33,7 @@ k8s-docker-pull:
 	docker pull $(CLOUDNATIVE-PG-POSTGRES)
 	docker pull $(FLYWAY)
 
-KIND_CLUSTER := clickhouse-starter-cluster
+KIND_CLUSTER := k8s-local-cluster
 
 k8s-create-cluster:
 	kind create cluster \
