@@ -21,10 +21,7 @@ FLYWAY					 		 := flyway/flyway:10.1-alpine
 
 k8s-docker-pull:
 	docker pull $(KIND)
-	docker pull $(ALTINITY-CLICKHOUSE-OPERATOR)
 	docker pull $(ALTINITY-METRICS-EXPORTER)
-	docker pull $(CLICKHOUSE-SERVER)
-	docker pull $(GOOSE-MIGRATION)
 	docker pull $(STRIMZI-OPERATOR)
 	docker pull $(STRIMZI-KAFKA)
 	docker pull $(CLOUDNATIVE-PG)
@@ -74,10 +71,7 @@ k8s-delete-telepresence:
 	telepresence quit -s
 
 k8s-load-docker:
-	kind load docker-image $(ALTINITY-CLICKHOUSE-OPERATOR) --name $(KIND_CLUSTER)
 	kind load docker-image $(ALTINITY-METRICS-EXPORTER) --name $(KIND_CLUSTER)
-	kind load docker-image $(CLICKHOUSE-SERVER) --name $(KIND_CLUSTER)
-	kind load docker-image $(GOOSE-MIGRATION) --name $(KIND_CLUSTER)
 	kind load docker-image $(STRIMZI-OPERATOR) --name $(KIND_CLUSTER)
 	kind load docker-image $(STRIMZI-KAFKA) --name $(KIND_CLUSTER)
 	kind load docker-image $(STRIMZI-KAFKA-CONNECT) --name $(KIND_CLUSTER)
