@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+configMapGenerator:
+  - name: eliot-erp-sales-sync-worker-cm
+    namespace: eliot
+    options:
+      annotations:
+        reloader.stakater.com/match: "true"
+    files:
+      - ../base/erp-sales-sync.yaml
+
+resources:
+  - namespace.yaml
+  - pg-core-super-secret.yaml
+  - ../base/release-erp-sales-sync.yaml
+
+patches:
+  - path: ./release-erp-sales-sync-patch.yaml

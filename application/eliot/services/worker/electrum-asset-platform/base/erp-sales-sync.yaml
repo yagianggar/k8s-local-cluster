@@ -1,0 +1,50 @@
+logger:
+  level: INFO
+  format: json
+  add_timestamp: true
+  static_fields:
+    '@service': eliot-erp-sales-sync-worker
+
+input_resources:
+  - label: stock_picking_kafka_consumer
+    kafka:
+        addresses:
+          - kafka-hub-kafka-bootstrap.kafka-hub.svc.cluster.local:9092
+          # - localhost:9092
+        topics:
+          - pg-core.public.stock_picking
+        consumer_group: "erp-sales-sync-worker"
+        start_from_oldest: false
+        group:
+          session_timeout: 10s
+          heartbeat_interval: 3s
+          rebalance_timeout: 60s
+        batching:
+          count: 20
+          period: 1s
+    processors:
+      - mapping: |
+          meta source = "stock_picking_kafka_consumer"
+          root = this.after
+      - mapping: |
+          root = this
+
+# processor_resources:
+#   - label: query_db
+#     sql_raw:
+#       driver: postgres
+#       dsn: postgres://postgres:postgres@localhost:5435/eliot-db?sslmode=disable
+#       query: '${!metadata("ddl_query")}'
+#       args_mapping: root = this.query_parameter
+#       unsafe_dynamic_query: true
+#       conn_max_idle_time: "20s"
+#       conn_max_life_time: "60s"
+#       conn_max_idle: 2
+#       conn_max_open: 20
+
+input:
+  resource: stock_picking_kafka_consumer
+
+output:
+  stdout:
+    codec: lines
